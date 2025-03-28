@@ -9,12 +9,19 @@ import SwiftUI
 
 @main
 struct XBikeAppApp: App {
-    let persistenceController = PersistenceController.shared
+    @State private var hasSeenOnboarding: Bool = UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
+    
+    //let persistenceController = PersistenceController.shared
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            if hasSeenOnboarding {
+                MainTabBarView()
+            } else {
+                OnboardingView(viewModel: OnboardingViewModel()) {
+                    hasSeenOnboarding = true
+                }
+            }
         }
     }
 }
